@@ -6,7 +6,6 @@ import { Joke } from './joke.entity';
 import { Rate } from './rate.entity';
 import { Report } from './report.entity';
 
-
 @Entity()
 export class User {
 
@@ -17,68 +16,80 @@ export class User {
         nullable: true,
         unique: true,
         length: 50,
-        name: 'username'
+        name: 'username',
     })
     username: string | null;
 
-
     @Column('varchar', {
-        nullable: true,
+        nullable: false,
         length: 250,
-        name: 'Name'
+        name: 'Name',
     })
-    Name: string | null;
-
+    Name: string;
 
     @Column('varchar', {
-        nullable: true,
+        nullable: false,
         length: 250,
-        name: 'Email'
+        name: 'Email',
     })
-    Email: string | null;
-
+    Email: string;
 
     @Column('varchar', {
-        nullable: true,
+        nullable: false,
         length: 150,
-        name: 'password'
+        name: 'password',
     })
-    password: string | null;
+    password: string;
 
-
-
-    @ManyToOne(() => Level, level => level.users, { nullable: false, onDelete: 'NO ACTION', onUpdate: 'NO ACTION' })
-    @JoinColumn({ name: 'level_id' })
+    @ManyToOne(() => Level, level => level.users,
+        {
+            nullable: true,
+            onDelete: 'NO ACTION',
+            onUpdate: 'NO ACTION',
+        })
+    @JoinColumn()
     level: Level | null;
 
-
-
-    @OneToMany(() => Comment, comment => comment.user, { onDelete: 'NO ACTION', onUpdate: 'NO ACTION' })
+    @OneToMany(() => Comment, comment => comment.user,
+        {
+            onDelete: 'NO ACTION',
+            onUpdate: 'NO ACTION',
+        })
     comments: Comment[];
 
-
-
-    @OneToMany(() => Follow, follow => follow.userUserId, { onDelete: 'NO ACTION', onUpdate: 'NO ACTION' })
+    @OneToMany(() => Follow, follow => follow.userUserId,
+        {
+            onDelete: 'NO ACTION',
+            onUpdate: 'NO ACTION',
+        })
     follows: Follow[];
 
-
-
-    @OneToMany(() => Follow, follow => follow.userUserId2, { onDelete: 'NO ACTION', onUpdate: 'NO ACTION' })
+    @OneToMany(() => Follow, follow => follow.userUserId2,
+        {
+            onDelete: 'NO ACTION',
+            onUpdate: 'NO ACTION',
+        })
     follows2: Follow[];
 
-
-
-    @OneToMany(() => Joke, joke => joke.user, { onDelete: 'NO ACTION', onUpdate: 'NO ACTION' })
+    @OneToMany(() => Joke, joke => joke.user,
+        {
+            onDelete: 'NO ACTION',
+            onUpdate: 'NO ACTION',
+        })
     jokes: Joke[];
 
-
-
-    @OneToMany(() => Rate, rate => rate.user, { onDelete: 'NO ACTION', onUpdate: 'NO ACTION' })
+    @OneToMany(() => Rate, rate => rate.user,
+        {
+            onDelete: 'NO ACTION',
+            onUpdate: 'NO ACTION',
+        })
     rates: Rate[];
 
-
-
-    @OneToMany(() => Report, report => report.userUser, { onDelete: 'NO ACTION', onUpdate: 'NO ACTION' })
+    @OneToMany(() => Report, report => report.userUser,
+        {
+            onDelete: 'NO ACTION',
+            onUpdate: 'NO ACTION',
+        })
     reports: Report[];
 
 }

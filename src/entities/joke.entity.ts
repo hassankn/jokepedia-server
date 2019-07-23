@@ -27,8 +27,6 @@ export class Joke {
     @JoinColumn()
     user: User | null;
 
-
-
     @OneToMany(() => Comment, comment => comment.joke,
         {
             onDelete: 'NO ACTION',

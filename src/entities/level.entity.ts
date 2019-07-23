@@ -8,18 +8,18 @@ export class Level {
     levelId: number;
 
     @Column('varchar', {
-        nullable: true,
+        nullable: false,
         length: 150,
         name: 'name',
     })
-    name: string | null;
+    name: string;
 
     @Column('varchar', {
-        nullable: true,
+        nullable: false,
         length: 250,
         name: 'description',
     })
-    description: string | null;
+    description: string;
 
     @OneToMany(() => User, user => user.level,
         {
