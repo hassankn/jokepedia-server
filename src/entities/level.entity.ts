@@ -1,16 +1,16 @@
 import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId} from "typeorm";
-import {joke_category} from "./joke_category";
+import {user} from "./user.entity";
 
 
-@Entity("category",{schema:"jokedb" } )
-export class category {
+@Entity("level",{schema:"jokedb" } )
+export class Level {
 
     @Column("int",{ 
         nullable:false,
         primary:true,
-        name:"category_id"
+        name:"level_id"
         })
-    category_id:number;
+    levelId:number;
         
 
     @Column("varchar",{ 
@@ -30,7 +30,7 @@ export class category {
         
 
    
-    @OneToMany(type=>joke_category, joke_category=>joke_category.category,{ onDelete: 'NO ACTION' ,onUpdate: 'NO ACTION' })
-    jokeCategorys:joke_category[];
+    @OneToMany(type=>user, user=>user.level,{ onDelete: 'NO ACTION' ,onUpdate: 'NO ACTION' })
+    users:user[];
     
 }

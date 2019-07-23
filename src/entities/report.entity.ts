@@ -1,19 +1,19 @@
 import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId} from "typeorm";
-import {user} from "./user";
-import {joke} from "./joke";
+import {user} from "./user.entity";
+import {joke} from "./joke.entity";
 
 
 @Entity("report",{schema:"jokedb" } )
 @Index("fk_report_user1_idx",["userUser",])
 @Index("fk_report_joke1_idx",["jokeJoke",])
-export class report {
+export class Report {
 
     @Column("int",{ 
         nullable:false,
         primary:true,
         name:"report_id"
         })
-    report_id:number;
+    reportId:number;
         
 
    

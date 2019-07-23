@@ -1,21 +1,21 @@
 import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId} from "typeorm";
-import {user} from "./user";
-import {comment} from "./comment";
-import {joke_category} from "./joke_category";
-import {rate} from "./rate";
-import {report} from "./report";
+import {user} from "./user.entity";
+import {comment} from "./comment.entity";
+import {joke_category} from "./joke-category.entity";
+import {rate} from "./rate.entity";
+import {report} from "./report.entity";
 
 
 @Entity("joke",{schema:"jokedb" } )
 @Index("fk_joke_User1_idx",["user",])
-export class joke {
+export class Joke {
 
     @Column("int",{ 
         nullable:false,
         primary:true,
         name:"joke_id"
         })
-    joke_id:number;
+    jokeId:number;
         
 
     @Column("varchar",{ 

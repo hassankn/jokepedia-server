@@ -1,11 +1,11 @@
 import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId} from "typeorm";
-import {user} from "./user";
+import {user} from "./user.entity";
 
 
 @Entity("follow",{schema:"jokedb" } )
 @Index("fk_Follow_User_idx",["userUserId",])
 @Index("fk_Follow_User1_idx",["userUserId2",])
-export class follow {
+export class Follow {
 
    
     @ManyToOne(type=>user, user=>user.follows,{ primary:true, nullable:false,onDelete: 'NO ACTION',onUpdate: 'NO ACTION' })
