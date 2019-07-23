@@ -1,54 +1,59 @@
-import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId} from "typeorm";
-import {user} from "./user.entity";
-import {comment} from "./comment.entity";
-import {joke_category} from "./joke-category.entity";
-import {rate} from "./rate.entity";
-import {report} from "./report.entity";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from './user.entity';
+import { Comment } from './comment.entity';
+import { JokeCategory } from './joke-category.entity';
+import { Rate } from './rate.entity';
+import { Report } from './report.entity';
 
-
-@Entity("joke",{schema:"jokedb" } )
-@Index("fk_joke_User1_idx",["user",])
+@Entity()
 export class Joke {
 
-    @Column("int",{ 
-        nullable:false,
-        primary:true,
-        name:"joke_id"
+    @PrimaryGeneratedColumn()
+    jokeId: number;
+
+    @Column('varchar', {
+        nullable: false,
+        length: 10000,
+        name: 'text',
+    })
+    text: string;
+
+    @ManyToOne(() => User, user => user.jokes,
+        {
+            nullable: false,
+            onDelete: 'NO ACTION',
+            onUpdate: 'NO ACTION',
         })
-    jokeId:number;
-        
+    @JoinColumn()
+    user: User | null;
 
-    @Column("varchar",{ 
-        nullable:true,
-        length:10000,
-        name:"text"
+
+
+    @OneToMany(() => Comment, comment => comment.joke,
+        {
+            onDelete: 'NO ACTION',
+            onUpdate: 'NO ACTION',
         })
-    text:string | null;
-        
+    comments: Comment[];
 
-   
-    @ManyToOne(type=>user, user=>user.jokes,{  nullable:false,onDelete: 'NO ACTION',onUpdate: 'NO ACTION' })
-    @JoinColumn({ name:'user_id'})
-    user:user | null;
+    @OneToMany(() => JokeCategory, jokeCategory => jokeCategory.joke,
+        {
+            onDelete: 'NO ACTION',
+            onUpdate: 'NO ACTION',
+        })
+    jokeCategorys: JokeCategory[];
 
+    @OneToMany(() => Rate, rate => rate.joke,
+        {
+            onDelete: 'NO ACTION',
+            onUpdate: 'NO ACTION',
+        })
+    rates: Rate[];
 
-   
-    @OneToMany(type=>comment, comment=>comment.joke,{ onDelete: 'NO ACTION' ,onUpdate: 'NO ACTION' })
-    comments:comment[];
-    
-
-   
-    @OneToMany(type=>joke_category, joke_category=>joke_category.joke,{ onDelete: 'NO ACTION' ,onUpdate: 'NO ACTION' })
-    jokeCategorys:joke_category[];
-    
-
-   
-    @OneToMany(type=>rate, rate=>rate.joke,{ onDelete: 'NO ACTION' ,onUpdate: 'NO ACTION' })
-    rates:rate[];
-    
-
-   
-    @OneToMany(type=>report, report=>report.jokeJoke,{ onDelete: 'NO ACTION' ,onUpdate: 'NO ACTION' })
-    reports:report[];
-    
+    @OneToMany(() => Report, report => report.jokeJoke,
+        {
+            onDelete: 'NO ACTION',
+            onUpdate: 'NO ACTION',
+        })
+    reports: Report[];
 }

@@ -1,36 +1,31 @@
-import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId} from "typeorm";
-import {user} from "./user.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from './user.entity';
 
-
-@Entity("level",{schema:"jokedb" } )
+@Entity()
 export class Level {
 
-    @Column("int",{ 
-        nullable:false,
-        primary:true,
-        name:"level_id"
-        })
-    levelId:number;
-        
+    @PrimaryGeneratedColumn()
+    levelId: number;
 
-    @Column("varchar",{ 
-        nullable:true,
-        length:150,
-        name:"name"
-        })
-    name:string | null;
-        
+    @Column('varchar', {
+        nullable: true,
+        length: 150,
+        name: 'name',
+    })
+    name: string | null;
 
-    @Column("varchar",{ 
-        nullable:true,
-        length:250,
-        name:"description"
-        })
-    description:string | null;
-        
+    @Column('varchar', {
+        nullable: true,
+        length: 250,
+        name: 'description',
+    })
+    description: string | null;
 
-   
-    @OneToMany(type=>user, user=>user.level,{ onDelete: 'NO ACTION' ,onUpdate: 'NO ACTION' })
-    users:user[];
-    
+    @OneToMany(() => User, user => user.level,
+        {
+            onDelete: 'NO ACTION',
+            onUpdate: 'NO ACTION',
+        })
+    users: User[];
+
 }

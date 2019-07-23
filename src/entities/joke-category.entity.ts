@@ -1,30 +1,29 @@
-import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId} from "typeorm";
-import {joke} from "./joke.entity";
-import {category} from "./category.entity";
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Joke } from './joke.entity';
+import { Category } from './category.entity';
 
-
-@Entity("joke_category",{schema:"jokedb" } )
-@Index("fk_joke_category_joke1_idx",["joke",])
-@Index("fk_joke_category_category1_idx",["category",])
+@Entity()
 export class JokeCategory {
 
-    @Column("int",{ 
-        nullable:false,
-        primary:true,
-        name:"joke_category_id"
+    @PrimaryGeneratedColumn()
+    jokeCategoryId: number;
+
+    @ManyToOne(() => Joke, joke => joke.jokeCategorys,
+        {
+            nullable: false,
+            onDelete: 'NO ACTION',
+            onUpdate: 'NO ACTION',
         })
-    jokeCategoryId:number;
-        
+    @JoinColumn()
+    joke: Joke;
 
-   
-    @ManyToOne(type=>joke, joke=>joke.jokeCategorys,{  nullable:false,onDelete: 'NO ACTION',onUpdate: 'NO ACTION' })
-    @JoinColumn({ name:'joke_id'})
-    joke:joke | null;
-
-
-   
-    @ManyToOne(type=>category, category=>category.jokeCategorys,{  nullable:false,onDelete: 'NO ACTION',onUpdate: 'NO ACTION' })
-    @JoinColumn({ name:'category_id'})
-    category:category | null;
+    @ManyToOne(() => Category, category => category.jokeCategories,
+        {
+            nullable: false,
+            onDelete: 'NO ACTION',
+            onUpdate: 'NO ACTION',
+        })
+    @JoinColumn()
+    category: Category;
 
 }
