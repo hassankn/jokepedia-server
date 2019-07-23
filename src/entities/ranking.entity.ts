@@ -1,17 +1,11 @@
 import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId} from "typeorm";
 
-
-@Entity("ranking",{schema:"jokedb" } )
+@Entity()
 export class Ranking {
 
-    @Column("int",{ 
-        nullable:false,
-        primary:true,
-        name:"Ranking_id"
-        })
+    @PrimaryGeneratedColumn()
     rankingId:number;
-        
-
+    
     @Column("varchar",{ 
         nullable:true,
         length:150,

@@ -1,23 +1,24 @@
-import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId} from "typeorm";
-import {joke} from "./joke.entity";
-import {user} from "./user.entity";
+import {BaseEntity,Column,Entity,Index,JoinColumn,JoinTable,ManyToMany,ManyToOne,OneToMany,OneToOne,PrimaryColumn,PrimaryGeneratedColumn,RelationId, Unique} from "typeorm";
+import {Joke} from "./joke.entity";
+import {User} from "./user.entity";
 
 
-@Entity("rate",{schema:"jokedb" } )
-@Index("fk_rate_joke1_idx",["joke",])
-@Index("fk_rate_user1_idx",["user",])
+@Entity()
+@Unique(['user', 'joke'])
 export class Rate {
 
-   
-    @ManyToOne(type=>joke, joke=>joke.rates,{ primary:true, nullable:false,onDelete: 'NO ACTION',onUpdate: 'NO ACTION' })
+    @PrimaryGeneratedColumn()
+    rateId:number;
+
+    @ManyToOne(type=>Joke, joke=>joke.rates,{ primary:true, nullable:false,onDelete: 'NO ACTION',onUpdate: 'NO ACTION' })
     @JoinColumn({ name:'joke_id'})
-    joke:joke | null;
+    joke:Joke | null;
 
 
    
-    @ManyToOne(type=>user, user=>user.rates,{ primary:true, nullable:false,onDelete: 'NO ACTION',onUpdate: 'NO ACTION' })
+    @ManyToOne(type=>User, user=>user.rates,{ primary:true, nullable:false,onDelete: 'NO ACTION',onUpdate: 'NO ACTION' })
     @JoinColumn({ name:'user_id'})
-    user:user | null;
+    user:User | null;
 
 
     @Column("int",{ 
