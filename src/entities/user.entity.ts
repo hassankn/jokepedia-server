@@ -16,28 +16,24 @@ export class User {
         nullable: true,
         unique: true,
         length: 50,
-        name: 'username',
     })
     username: string | null;
 
     @Column('varchar', {
         nullable: false,
         length: 250,
-        name: 'Name',
-    })
-    Name: string;
+        })
+    name: string;
 
     @Column('varchar', {
         nullable: false,
         length: 250,
-        name: 'Email',
     })
-    Email: string;
+    email: string;
 
     @Column('varchar', {
         nullable: false,
         length: 150,
-        name: 'password',
     })
     password: string;
 

@@ -8,19 +8,23 @@ export class Category {
     categoryId: number;
 
     @Column('varchar', {
-        nullable: true,
+        nullable: false,
         length: 150,
         name: 'name',
     })
-    name: string | null;
+    name: string;
 
     @Column('varchar', {
-        nullable: true,
+        nullable: false,
         length: 250,
         name: 'description',
     })
-    description: string | null;
+    description: string;
 
-    @OneToMany(() => JokeCategory, jokeCategory => jokeCategory.category, { onDelete: 'NO ACTION', onUpdate: 'NO ACTION' })
+    @OneToMany(() => JokeCategory, jokeCategory => jokeCategory.category,
+        {
+            onDelete: 'NO ACTION',
+            onUpdate: 'NO ACTION',
+        })
     jokeCategories: JokeCategory[];
 }
