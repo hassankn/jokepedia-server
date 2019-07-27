@@ -1,4 +1,4 @@
-import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { User } from './user.entity';
 import { Joke } from './joke.entity';
 
@@ -15,7 +15,7 @@ export class Report {
             onUpdate: 'NO ACTION',
         })
     @JoinColumn()
-    userUser: User | null;
+    user: User;
 
     @ManyToOne(() => Joke, joke => joke.reports,
         {
@@ -24,6 +24,11 @@ export class Report {
             onUpdate: 'NO ACTION',
         })
     @JoinColumn()
-    jokeJoke: Joke | null;
+    joke: Joke;
+
+    @Column('varchar', {
+        nullable: false,
+    })
+    description: string;
 
 }

@@ -8,7 +8,7 @@ export class JokeCategory {
     @PrimaryGeneratedColumn()
     jokeCategoryId: number;
 
-    @ManyToOne(() => Joke, joke => joke.jokeCategorys,
+    @ManyToOne(() => Joke, joke => joke.jokeCategories,
         {
             nullable: false,
             onDelete: 'NO ACTION',
@@ -25,5 +25,4 @@ export class JokeCategory {
         })
     @JoinColumn()
     category: Category;
-
 }

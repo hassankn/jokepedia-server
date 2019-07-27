@@ -16,7 +16,8 @@ import { UserController } from './controllers/user.controller';
   ],
   providers: [
     AppService,
-    UserService],
+    UserService,
+  ],
 })
 export class AppModule {
   constructor(private readonly connection: Connection) { }

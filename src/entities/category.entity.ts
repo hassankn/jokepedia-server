@@ -10,14 +10,12 @@ export class Category {
     @Column('varchar', {
         nullable: false,
         length: 150,
-        name: 'name',
     })
     name: string;
 
     @Column('varchar', {
         nullable: false,
         length: 250,
-        name: 'description',
     })
     description: string;
 

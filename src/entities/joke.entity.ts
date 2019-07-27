@@ -14,7 +14,6 @@ export class Joke {
     @Column('varchar', {
         nullable: false,
         length: 10000,
-        name: 'text',
     })
     text: string;
 
@@ -39,7 +38,7 @@ export class Joke {
             onDelete: 'NO ACTION',
             onUpdate: 'NO ACTION',
         })
-    jokeCategorys: JokeCategory[];
+    jokeCategories: JokeCategory[];
 
     @OneToMany(() => Rate, rate => rate.joke,
         {
@@ -48,7 +47,7 @@ export class Joke {
         })
     rates: Rate[];
 
-    @OneToMany(() => Report, report => report.jokeJoke,
+    @OneToMany(() => Report, report => report.joke,
         {
             onDelete: 'NO ACTION',
             onUpdate: 'NO ACTION',

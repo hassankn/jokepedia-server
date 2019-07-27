@@ -17,7 +17,7 @@ export class Rate {
             onUpdate: 'NO ACTION',
         })
     @JoinColumn()
-    joke: Joke | null;
+    joke: Joke;
 
     @ManyToOne(() => User, user => user.rates,
         {
@@ -31,7 +31,6 @@ export class Rate {
 
     @Column('int', {
         nullable: false,
-        name: 'rating',
     })
     rating: number;
 

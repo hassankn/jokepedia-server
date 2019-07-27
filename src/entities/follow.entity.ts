@@ -8,19 +8,15 @@ export class Follow {
         {
             primary: true,
             nullable: false,
-            onDelete: 'NO ACTION',
-            onUpdate: 'NO ACTION',
         })
     @JoinColumn()
-    userUserId: User | null;
+    follows: User;
 
-    @ManyToOne(() => User, user => user.follows2,
+    @ManyToOne(() => User, user => user.follower,
         {
             primary: true,
             nullable: false,
-            onDelete: 'NO ACTION',
-            onUpdate: 'NO ACTION',
         })
-    @JoinColumn({ name: 'User_User_id2' })
-    userUserId2: User | null;
+    @JoinColumn()
+    follower: User;
 }

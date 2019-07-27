@@ -15,14 +15,12 @@ export class User {
     @Column('varchar', {
         nullable: true,
         unique: true,
-        length: 50,
     })
-    username: string | null;
+    username: string;
 
     @Column('varchar', {
         nullable: false,
-        length: 250,
-        })
+    })
     name: string;
 
     @Column('varchar', {
@@ -53,19 +51,19 @@ export class User {
         })
     comments: Comment[];
 
-    @OneToMany(() => Follow, follow => follow.userUserId,
+    @OneToMany(() => Follow, follow => follow.follows,
         {
             onDelete: 'NO ACTION',
             onUpdate: 'NO ACTION',
         })
     follows: Follow[];
 
-    @OneToMany(() => Follow, follow => follow.userUserId2,
+    @OneToMany(() => Follow, follow => follow.follower,
         {
             onDelete: 'NO ACTION',
             onUpdate: 'NO ACTION',
         })
-    follows2: Follow[];
+    follower: Follow[];
 
     @OneToMany(() => Joke, joke => joke.user,
         {
@@ -81,7 +79,7 @@ export class User {
         })
     rates: Rate[];
 
-    @OneToMany(() => Report, report => report.userUser,
+    @OneToMany(() => Report, report => report.user,
         {
             onDelete: 'NO ACTION',
             onUpdate: 'NO ACTION',
