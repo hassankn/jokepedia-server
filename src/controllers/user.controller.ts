@@ -1,7 +1,7 @@
 import { Get, Controller, Res, Post, Headers, Param } from '@nestjs/common';
-import { UserService } from 'src/services/user.service';
+import { UserService } from '../services/user.service';
 import { Response as ServerResponse } from 'express-serve-static-core';
-import { JokeService } from 'src/services/joke.service';
+import { JokeService } from '../services/joke.service';
 
 @Controller('user')
 export class UserController {

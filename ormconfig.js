@@ -5,6 +5,7 @@ module.exports = {
     "username": "root",
     "password": "password",
     "database": "jokepedia",
-    "entities": ["src/**/*.entity{.ts,.js}"],
-    "synchronize": true
+    "entities": ["dist/**/*.entity{.ts,.js}"],
+    "synchronize": true,
+    "logging": true,
 }
