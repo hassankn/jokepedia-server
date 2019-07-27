@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
 import { User } from './user.entity';
 import { Comment } from './comment.entity';
 import { JokeCategory } from './joke-category.entity';
@@ -24,7 +24,7 @@ export class Joke {
             onUpdate: 'NO ACTION',
         })
     @JoinColumn()
-    user: User | null;
+    user: User;
 
     @OneToMany(() => Comment, comment => comment.joke,
         {
@@ -53,4 +53,7 @@ export class Joke {
             onUpdate: 'NO ACTION',
         })
     reports: Report[];
+
+    @CreateDateColumn()
+    dateCreated!: Date;
 }
