@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '../entities/user.entity';
-import { getRepository } from 'typeorm';
+import { getRepository, getConnection } from 'typeorm';
 import { Joke } from '../entities/joke.entity';
+import { Rate } from '../entities/rate.entity';
 
 @Injectable()
 export class UserService {
@@ -22,4 +23,16 @@ export class UserService {
 
         return count;
     }
+
+    //this service gets average ratings of all user jokes
+    async getAverageOfJokesPosted(userId: number) {
+        const avg = await getConnection()
+        .query
+        ("select avg(avgs) from (select avg(rating) avgs  from rate join joke on (joke.jokeId = rate.jokeJokeId)" 
+        + " where joke.userUserId = ? " 
+        + " group by (rate.jokeJokeId)) t", [userId])       
+    
+        return avg;
+    }
+
 }

@@ -2,6 +2,7 @@ import { Get, Controller, Res, Post, Headers, Param } from '@nestjs/common';
 import { UserService } from '../services/user.service';
 import { Response as ServerResponse } from 'express-serve-static-core';
 import { JokeService } from '../services/joke.service';
+import { async } from 'rxjs/internal/scheduler/async';
 
 @Controller('user')
 export class UserController {
@@ -33,5 +34,15 @@ export class UserController {
     ) {
         const count = await this.userService.getNumberOfJokesPosted(userId);
         res.send(count);
+    }
+
+    @Get(':userId/getAverageOfJokesPosted')
+    async getAverageOfJokesPosted(
+
+        @Res() res: ServerResponse,
+        @Param('userId') userId: number,
+    ){
+        const avg = await this.userService.getAverageOfJokesPosted(userId);
+        res.send(avg);
     }
 }
