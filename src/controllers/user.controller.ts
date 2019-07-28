@@ -45,4 +45,16 @@ export class UserController {
         const avg = await this.userService.getAverageOfJokesPosted(userId);
         res.send(avg);
     }
+
+    @Get(':userId/getTopJokesPosted')
+    async getTopJokesPosted(
+
+        @Res() res: ServerResponse,
+        @Param('userId') userId: number,
+    ) {
+        const topJokes = await this.userService.getTopRatedJokes(userId);
+        res.send(topJokes);
+    }
+
+    
 }
