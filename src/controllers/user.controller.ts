@@ -41,7 +41,7 @@ export class UserController {
 
         @Res() res: ServerResponse,
         @Param('userId') userId: number,
-    ){
+    ) {
         const avg = await this.userService.getAverageOfJokesPosted(userId);
         res.send(avg);
     }

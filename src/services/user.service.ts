@@ -18,20 +18,20 @@ export class UserService {
         const count = await getRepository(Joke)
             .createQueryBuilder('joke')
             .select('COUNT(*)', 'count')
-            .where({user: userId})
+            .where({ user: userId })
             .getRawOne();
 
         return count;
     }
 
-    //this service gets average ratings of all user jokes
+    // this service gets average ratings of all user jokes
     async getAverageOfJokesPosted(userId: number) {
         const avg = await getConnection()
-        .query
-        ("select avg(avgs) from (select avg(rating) avgs  from rate join joke on (joke.jokeId = rate.jokeJokeId)" 
-        + " where joke.userUserId = ? " 
-        + " group by (rate.jokeJokeId)) t", [userId])       
-    
+            .query
+            ('select avg(avgs) from (select avg(rating) avgs  from rate join joke on (joke.jokeId = rate.jokeJokeId)'
+                + ' where joke.userUserId = ? '
+                + ' group by (rate.jokeJokeId)) t', [userId]);
+
         return avg;
     }
 
