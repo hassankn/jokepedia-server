@@ -34,4 +34,16 @@ export class UserService {
         return avg;
     }
 
+    //this service is to fetch top 10 jokes posted by the user
+    async getTopRatedJokes(userId: number) {
+        const topJokes = await getConnection()
+            .query
+            ('select joke.text,avg(rating) avgs '+ 
+            'from rate join joke on (joke.jokeId = rate.jokeJokeId) '+
+            'where joke.userUserId = ? ' +
+            'group by (rate.jokeJokeId) order by avgs desc limit 10;', [userId]);
+
+        return topJokes;
+    }
+
 }
