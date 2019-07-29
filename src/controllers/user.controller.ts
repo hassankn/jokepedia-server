@@ -61,5 +61,16 @@ export class UserController {
     ) {
         const topJokes = await this.jokeService.getTopRatedJokes(userId);
         res.send(topJokes);
-    } 
+    }
+
+    @Get('getTenRandomJokes')
+    async getTenRandomJokes(
+
+        @Res() res: ServerResponse,
+    ) {
+        const jokes = await this.jokeService.getTenRandomJokes();
+        res.send(jokes);
+    }
+    
+    
 }

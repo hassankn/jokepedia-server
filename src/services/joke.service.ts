@@ -59,4 +59,15 @@ export class JokeService {
         return topJokes;
     }
 
+    async getTenRandomJokes(){
+        const jokes = await getConnection()
+        .query
+        ('select j.text, u.username, avg(r.rating) avgRating, date(j.dateCreated) timeStamp '+
+        'from joke j join user u on (j.userUserId = u.userId)'+
+        'join rate r on (j.jokeId = r.jokeJokeId)'+
+        ' group by (j.jokeId) order by rand() limit 5;')
+
+        return jokes;
+    }
+
 }
