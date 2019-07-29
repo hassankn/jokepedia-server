@@ -34,28 +34,27 @@ export class JokeService {
             .where({ user: userId })
             .getRawOne();
 
-        return count;
+        return count['count'];
     }
 
     // this service gets average ratings of all user jokes
     async getAverageOfJokesPosted(userId: number) {
         const avg = await getConnection()
             .query
-            ('select avg(avgs) from (select avg(rating) avgs  from rate join joke on (joke.jokeId = rate.jokeJokeId)'
+            ('select round(avg(avgs),2) avgRating from (select avg(rating) avgs  from rate join joke on (joke.jokeId = rate.jokeJokeId)'
                 + ' where joke.userUserId = ? '
                 + ' group by (rate.jokeJokeId)) t', [userId]);
 
-        return avg;
+        return avg[0]['avgRating'];
     }
 
     // this service is to fetch top 10 jokes posted by the user
     async getTopRatedJokes(userId: number) {
         const topJokes = await getConnection()
             .query
-            ('select joke.text,avg(rating) avgs ' +
-                'from rate join joke on (joke.jokeId = rate.jokeJokeId) ' +
-                'where joke.userUserId = ? ' +
-                'group by (rate.jokeJokeId) order by avgs desc limit 10;', [userId]);
+            ('select joke.text,avg(rating) avgs from joke left join rate on (joke.jokeId = rate.jokeJokeId)'+ 
+            'where joke.userUserId = ?'+
+            'group by (joke.jokeId) order by avgs desc limit 5;', [userId]);
 
         return topJokes;
     }

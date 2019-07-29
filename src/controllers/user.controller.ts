@@ -35,7 +35,7 @@ export class UserController {
         res.send(count);
     }
 
-    @Get(':userId/getAverageOfJokesPosted')
+    @Get(':userId/averageOfJokesPosted')
     async getAverageOfJokesPosted(
         @Res() res: ServerResponse,
         @Param('userId') userId: number,
