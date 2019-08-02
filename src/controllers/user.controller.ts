@@ -73,11 +73,20 @@ export class UserController {
     }
 
     @Get('getJokesForCategory/:categoryName')
-    async getJokesFprCategory(
+    async getJokesForCategory(
         @Res() res: ServerResponse,
         @Param('categoryName') categoryName:string,
     ) {
         const data = await this.jokeService.getJokesForCategory(categoryName);
+        res.send(data);
+    }
+
+    @Get('getJokesForUsername/:username')
+    async getJokesForUsername(
+        @Res() res: ServerResponse,
+        @Param('username') username:string,
+    ) {
+        const data = await this.jokeService.getJokesForUsername(username);
         res.send(data);
     }
     

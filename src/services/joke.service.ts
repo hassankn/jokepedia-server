@@ -74,11 +74,28 @@ export class JokeService {
     async getJokesForCategory(categoryName: string) {
         const data = await getConnection()
         .query
-        ('select jokeId, categoryCategoryId, text from joke join joke_category jc on (joke.jokeId = jc.jokeJokeId) '+
-         'where jc.categoryCategoryId in (select categoryId from category where name = ?);', [categoryName]);
+        ('select j.jokeId, jc.categoryCategoryId, j.text, round(ifnull(avg(r.rating),0),2) avgRating, date(j.dateCreated) posted, '+
+        'u.username from joke j join joke_category jc '+ 
+        'on (j.jokeId = jc.jokeJokeId) '+
+        'left join rate r on (j.jokeId = r.jokeJokeId) '+
+        'join user u on (j.userUserId = u.userId) '+
+        'where jc.categoryCategoryId in (select categoryId from category where name = ?) '+
+        'group by (j.jokeId) order by avgRating,posted desc;', [categoryName]);
 
         return data;
 
     }
 
+    async getJokesForUsername(username: string) {
+        const data = await getConnection()
+        .query
+        ('select j.jokeId, j.text, ifnull(avg(r.rating),0) avgRating, date(j.dateCreated) posted, '+
+         'u.username from joke j '+
+         'left join rate r on (j.jokeId = r.jokeJokeId) '+
+         'join user u on (j.userUserId = u.userId) where u.username = ? '+
+         'group by (j.jokeId) order by avgRating desc;', [username]);
+
+        return data;
+
+    }
 }
