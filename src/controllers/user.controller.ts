@@ -72,12 +72,12 @@ export class UserController {
         res.send(jokes);
     }
 
-    @Get('getJokesForCategory/:categoryName')
+    @Get('getJokesForCategory/:categoryId')
     async getJokesForCategory(
         @Res() res: ServerResponse,
-        @Param('categoryName') categoryName:string,
+        @Param('categoryId') categoryId:number,
     ) {
-        const data = await this.jokeService.getJokesForCategory(categoryName);
+        const data = await this.jokeService.getJokesForCategory(categoryId);
         res.send(data);
     }
 
