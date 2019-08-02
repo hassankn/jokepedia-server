@@ -89,6 +89,12 @@ export class UserController {
         const data = await this.jokeService.getJokesForUsername(username);
         res.send(data);
     }
-    
-    
+
+    @Get('getCategories')
+    async getCategories(
+        @Res() res: ServerResponse,
+    ) {
+        const categories = await this.jokeService.getCategories();
+        res.send(categories);
+    }
 }

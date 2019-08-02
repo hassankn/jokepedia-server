@@ -96,6 +96,13 @@ export class JokeService {
          'group by (j.jokeId) order by avgRating desc;', [username]);
 
         return data;
-
     }
+
+    async getCategories() {
+        const categories = await getConnection()
+        .query
+        ('select categoryId, name from category');
+        return categories;
+    }
+
 }
