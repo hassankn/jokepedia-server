@@ -6,10 +6,14 @@ import { Connection } from 'typeorm';
 import { UserService } from './services/user.service';
 import { UserController } from './controllers/user.controller';
 import { JokeService } from './services/joke.service';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(),
+    AuthModule,
+    UsersModule,
   ],
   controllers: [
     AppController,
