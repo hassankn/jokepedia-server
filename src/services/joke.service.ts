@@ -65,9 +65,20 @@ export class JokeService {
         ('select j.text, u.username, avg(r.rating) avgRating, date(j.dateCreated) timeStamp '+
         'from joke j join user u on (j.userUserId = u.userId)'+
         'join rate r on (j.jokeId = r.jokeJokeId)'+
-        ' group by (j.jokeId) order by rand() limit 5;')
+        ' group by (j.jokeId) order by rand() limit 5;');
 
         return jokes;
+    }
+
+    // gets back jokeId, categoryId, text for the given category
+    async getJokesForCategory(categoryName: string) {
+        const data = await getConnection()
+        .query
+        ('select jokeId, categoryCategoryId, text from joke join joke_category jc on (joke.jokeId = jc.jokeJokeId) '+
+         'where jc.categoryCategoryId in (select categoryId from category where name = ?);', [categoryName]);
+
+        return data;
+
     }
 
 }

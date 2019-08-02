@@ -71,6 +71,15 @@ export class UserController {
         const jokes = await this.jokeService.getTenRandomJokes();
         res.send(jokes);
     }
+
+    @Get('getJokesForCategory/:categoryName')
+    async getJokesFprCategory(
+        @Res() res: ServerResponse,
+        @Param('categoryName') categoryName:string,
+    ) {
+        const data = await this.jokeService.getJokesForCategory(categoryName);
+        res.send(data);
+    }
     
     
 }
