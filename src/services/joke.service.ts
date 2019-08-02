@@ -105,4 +105,10 @@ export class JokeService {
         return categories;
     }
 
+    async postJoke(newJoke: any, userId: number) {
+
+        console.log(newJoke);
+        console.log(userId);
+    }
+
 }

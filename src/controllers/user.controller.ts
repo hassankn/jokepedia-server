@@ -44,15 +44,6 @@ export class UserController {
         res.send(avg);
     }
 
-    @Post(':userId/postJoke')
-    async postJoke(
-        @Res() res: ServerResponse,
-        @Param('userId') userId: number,
-        @Body('jokeText') jokeText: string,
-    ) {
-        const response = this.jokeService.postJokeByUser(userId, jokeText);
-        res.send(response);
-    }
     @Get(':userId/getTopJokesPosted')
     async getTopJokesPosted(
 
@@ -75,7 +66,7 @@ export class UserController {
     @Get('getJokesForCategory/:categoryId')
     async getJokesForCategory(
         @Res() res: ServerResponse,
-        @Param('categoryId') categoryId:number,
+        @Param('categoryId') categoryId: number,
     ) {
         const data = await this.jokeService.getJokesForCategory(categoryId);
         res.send(data);
@@ -84,7 +75,7 @@ export class UserController {
     @Get('getJokesForUsername/:username')
     async getJokesForUsername(
         @Res() res: ServerResponse,
-        @Param('username') username:string,
+        @Param('username') username: string,
     ) {
         const data = await this.jokeService.getJokesForUsername(username);
         res.send(data);
@@ -96,5 +87,17 @@ export class UserController {
     ) {
         const categories = await this.jokeService.getCategories();
         res.send(categories);
+    }
+
+    @Post(':userId/postJoke')
+    async postJoke(
+        @Res() res: ServerResponse,
+        @Param('userId') userId: number,
+        @Body('newJoke') newJoke: any) {
+
+        console.log(newJoke);
+        console.log(userId);
+        const response = await this.jokeService.postJoke(newJoke, userId);
+        res.send(response);
     }
 }
