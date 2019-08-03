@@ -99,6 +99,16 @@ export class UserController {
         res.send(response);
     }
 
+    @Post(':userId/rateJoke')
+    async rateJoke(
+        @Res() res: ServerResponse,
+        @Param('userId') userId: number,
+        @Body('newRate') newRate: any) {
+
+        const response = await this.jokeService.rateJoke(newRate, userId);
+        res.send(response);
+    }
+
     @Get('getTopTenOfYear')
     async getTopTenOfYear(
         @Res() res: ServerResponse,
