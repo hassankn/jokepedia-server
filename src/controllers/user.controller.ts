@@ -100,4 +100,30 @@ export class UserController {
         const response = await this.jokeService.postJoke(newJoke, userId);
         res.send(response);
     }
+
+    @Get('getTopTenOfYear')
+    async getTopTenOfYear(
+        @Res() res: ServerResponse,
+    ) {
+        const jokes = await this.jokeService.getTopTenOfYear();
+        res.send(jokes);
+    }
+
+    @Get('getTopTenOfMonth')
+    async getTopTenOfMonth(
+        @Res() res: ServerResponse,
+    ) {
+        const jokes = await this.jokeService.getTopTenOfMonth();
+        res.send(jokes);
+    }
+
+    @Get('getTopTenOfAllTime')
+    async getTopTenOfAllTime(
+        @Res() res: ServerResponse,
+    ) {
+        const jokes = await this.jokeService.getTopTenOfAllTime();
+        res.send(jokes);
+    }
+
+
 }

@@ -52,20 +52,20 @@ export class JokeService {
     async getTopRatedJokes(userId: number) {
         const topJokes = await getConnection()
             .query
-            ('select joke.text,avg(rating) avgs from joke left join rate on (joke.jokeId = rate.jokeJokeId)'+ 
-            'where joke.userUserId = ?'+
-            'group by (joke.jokeId) order by avgs desc limit 5;', [userId]);
+            ('select joke.text,avg(rating) avgs from joke left join rate on (joke.jokeId = rate.jokeJokeId)' +
+                'where joke.userUserId = ?' +
+                'group by (joke.jokeId) order by avgs desc limit 5;', [userId]);
 
         return topJokes;
     }
 
-    async getTenRandomJokes(){
+    async getTenRandomJokes() {
         const jokes = await getConnection()
-        .query
-        ('select j.text, u.username, avg(r.rating) avgRating, date(j.dateCreated) timeStamp '+
-        'from joke j join user u on (j.userUserId = u.userId)'+
-        'join rate r on (j.jokeId = r.jokeJokeId)'+
-        ' group by (j.jokeId) order by rand() limit 5;');
+            .query
+            ('select j.text, u.username, avg(r.rating) avgRating, date(j.dateCreated) timeStamp ' +
+                'from joke j join user u on (j.userUserId = u.userId)' +
+                'join rate r on (j.jokeId = r.jokeJokeId)' +
+                ' group by (j.jokeId) order by rand() limit 5;');
 
         return jokes;
     }
@@ -73,14 +73,14 @@ export class JokeService {
     // gets back jokeId, categoryId, text for the given category
     async getJokesForCategory(categoryId: number) {
         const data = await getConnection()
-        .query
-        ('select j.jokeId, jc.categoryCategoryId, j.text, round(ifnull(avg(r.rating),0),2) avgRating, date(j.dateCreated) posted, '+
-        'u.username from joke j join joke_category jc '+ 
-        'on (j.jokeId = jc.jokeJokeId) '+
-        'left join rate r on (j.jokeId = r.jokeJokeId) '+
-        'join user u on (j.userUserId = u.userId) '+
-        'where jc.categoryCategoryId = ? '+
-        'group by (j.jokeId) order by avgRating,posted desc;', [categoryId]);
+            .query
+            ('select j.jokeId, jc.categoryCategoryId, j.text, round(ifnull(avg(r.rating),0),2) avgRating, date(j.dateCreated) posted, ' +
+                'u.username from joke j join joke_category jc ' +
+                'on (j.jokeId = jc.jokeJokeId) ' +
+                'left join rate r on (j.jokeId = r.jokeJokeId) ' +
+                'join user u on (j.userUserId = u.userId) ' +
+                'where jc.categoryCategoryId = ? ' +
+                'group by (j.jokeId) order by avgRating,posted desc;', [categoryId]);
 
         return data;
 
@@ -88,20 +88,20 @@ export class JokeService {
 
     async getJokesForUsername(username: string) {
         const data = await getConnection()
-        .query
-        ('select j.jokeId, j.text, ifnull(avg(r.rating),0) avgRating, date(j.dateCreated) posted, '+
-         'u.username from joke j '+
-         'left join rate r on (j.jokeId = r.jokeJokeId) '+
-         'join user u on (j.userUserId = u.userId) where u.username = ? '+
-         'group by (j.jokeId) order by avgRating desc;', [username]);
+            .query
+            ('select j.jokeId, j.text, ifnull(avg(r.rating),0) avgRating, date(j.dateCreated) posted, ' +
+                'u.username from joke j ' +
+                'left join rate r on (j.jokeId = r.jokeJokeId) ' +
+                'join user u on (j.userUserId = u.userId) where u.username = ? ' +
+                'group by (j.jokeId) order by avgRating desc;', [username]);
 
         return data;
     }
 
     async getCategories() {
         const categories = await getConnection()
-        .query
-        ('select categoryId, name from category');
+            .query
+            ('select categoryId, name from category');
         return categories;
     }
 
@@ -110,5 +110,40 @@ export class JokeService {
         console.log(newJoke);
         console.log(userId);
     }
+
+    // gives top rated jokes for a month
+    async getTopTenOfMonth() {
+        const jokes = await getConnection()
+            .query
+            ('select j.jokeId, j.text, ifnull(avg(r.rating),0) avgRating, day(j.dateCreated) posted, ' +
+                'u.username from joke j left join rate r on (j.jokeId = r.jokeJokeId) ' +
+                'join user u on (j.userUserId = u.userId) ' +
+                'where month(now()) = month(j.dateCreated) ' +
+                'group by (j.jokeId) order by avgRating desc limit 10;');
+        return jokes;
+    }
+
+    // gives top rated jokes for a year
+    async getTopTenOfYear() {
+        const jokes = await getConnection()
+            .query
+            ('select j.jokeId, j.text, ifnull(avg(r.rating),0) avgRating, day(j.dateCreated) posted, ' +
+                'u.username from joke j left join rate r on (j.jokeId = r.jokeJokeId) ' +
+                'join user u on (j.userUserId = u.userId) ' +
+                'where year(now()) = year(j.dateCreated) ' +
+                'group by (j.jokeId) order by avgRating desc limit 10;');
+        return jokes;
+    }
+
+        // gives top rated jokes for a year
+        async getTopTenOfAllTime() {
+            const jokes = await getConnection()
+                .query
+                ('select j.jokeId, j.text, ifnull(avg(r.rating),0) avgRating, day(j.dateCreated) posted, ' +
+                    'u.username from joke j left join rate r on (j.jokeId = r.jokeJokeId) ' +
+                    'join user u on (j.userUserId = u.userId) ' +
+                    'group by (j.jokeId) order by avgRating desc limit 10;');
+            return jokes;
+        }
 
 }
