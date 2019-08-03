@@ -42,7 +42,7 @@ export class JokeService {
     async getAverageOfJokesPosted(userId: number) {
         const avg = await getConnection()
             .query
-            ('select round(avg(avgs),2) avgRating from (select avg(rating) avgs  from rate join joke on (joke.jokeId = rate.jokeJokeId)'
+            ('select round(ifnull(avg(avgs),0.000),2) avgRating from (select avg(rating) avgs  from rate join joke on (joke.jokeId = rate.jokeJokeId)'
                 + ' where joke.userUserId = ? '
                 + ' group by (rate.jokeJokeId)) t', [userId]);
 
@@ -108,8 +108,8 @@ export class JokeService {
 
     async postJoke(newJoke: any, userId: number) {
 
-        const userPostedBy = await getRepository(User).findOne({where: {userId}});
-        const categoryOfJoke = await getRepository(Category).findOne({where: {categoryId: newJoke.categoryId}});
+        const userPostedBy = await getRepository(User).findOne({ where: { userId } });
+        const categoryOfJoke = await getRepository(Category).findOne({ where: { categoryId: newJoke.categoryId } });
 
         const newJokeToInsert = new Joke();
         newJokeToInsert.user = userPostedBy;
@@ -144,15 +144,17 @@ export class JokeService {
         return jokes;
     }
 
-        // gives top rated jokes for a year
-        async getTopTenOfAllTime() {
-            const jokes = await getConnection()
-                .query
-                ('select j.jokeId, j.text, ifnull(avg(r.rating),0) avgRating, day(j.dateCreated) posted, ' +
-                    'u.username from joke j left join rate r on (j.jokeId = r.jokeJokeId) ' +
-                    'join user u on (j.userUserId = u.userId) ' +
-                    'group by (j.jokeId) order by avgRating desc limit 10;');
-            return jokes;
-        }
+    // gives top rated jokes for a year
+    async getTopTenOfAllTime() {
+        const jokes = await getConnection()
+            .query
+            ('select j.jokeId, j.text, ifnull(avg(r.rating),0) avgRating, day(j.dateCreated) posted, ' +
+                'u.username from joke j left join rate r on (j.jokeId = r.jokeJokeId) ' +
+                'join user u on (j.userUserId = u.userId) ' +
+                'group by (j.jokeId) order by avgRating desc limit 10;');
+        return jokes;
+    }
+
+    
 
 }

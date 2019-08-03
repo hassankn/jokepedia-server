@@ -123,5 +123,15 @@ export class UserController {
         res.send(jokes);
     }
 
+    @Get('searchUsersByUsername/:username')
+    async searchUsersByUsername(
+        @Res() res: ServerResponse,
+        @Param('username') username: string
+    ) {
+        const users = await this.userService.searchUsersByUsername(username);
+        console.log(users);
+        res.send(users);
+    }
+
 
 }
