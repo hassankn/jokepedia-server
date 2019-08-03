@@ -95,8 +95,6 @@ export class UserController {
         @Param('userId') userId: number,
         @Body('newJoke') newJoke: any) {
 
-        console.log(newJoke);
-        console.log(userId);
         const response = await this.jokeService.postJoke(newJoke, userId);
         res.send(response);
     }

@@ -1,5 +1,5 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { JokeCategory } from './joke-category.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, ManyToMany } from 'typeorm';
+import { Joke } from './joke.entity';
 
 @Entity()
 export class Category {
@@ -19,10 +19,10 @@ export class Category {
     })
     description: string;
 
-    @OneToMany(() => JokeCategory, jokeCategory => jokeCategory.category,
+    @ManyToMany(() => Joke, joke => joke.categories,
         {
             onDelete: 'NO ACTION',
             onUpdate: 'NO ACTION',
         })
-    jokeCategories: JokeCategory[];
+    jokes: Joke[];
 }

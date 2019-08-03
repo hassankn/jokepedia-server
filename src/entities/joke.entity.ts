@@ -1,9 +1,9 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, CreateDateColumn, ManyToMany, JoinTable } from 'typeorm';
 import { User } from './user.entity';
 import { Comment } from './comment.entity';
-import { JokeCategory } from './joke-category.entity';
 import { Rate } from './rate.entity';
 import { Report } from './report.entity';
+import { Category } from './category.entity';
 
 @Entity()
 export class Joke {
@@ -33,12 +33,14 @@ export class Joke {
         })
     comments: Comment[];
 
-    @OneToMany(() => JokeCategory, jokeCategory => jokeCategory.joke,
+    @ManyToMany(() => Category, category => category.jokes,
         {
             onDelete: 'NO ACTION',
             onUpdate: 'NO ACTION',
+            cascade: true,
         })
-    jokeCategories: JokeCategory[];
+    @JoinTable()
+    categories: Category[];
 
     @OneToMany(() => Rate, rate => rate.joke,
         {
