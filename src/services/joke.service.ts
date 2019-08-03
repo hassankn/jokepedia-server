@@ -76,7 +76,7 @@ export class JokeService {
         const data = await getConnection()
             .query
             ('select j.jokeId, jc.categoryCategoryId, j.text, round(ifnull(avg(r.rating),0),2) avgRating, date(j.dateCreated) posted, ' +
-                'u.username from joke j join joke_category jc ' +
+                'u.username from joke j join joke_categories_category jc ' +
                 'on (j.jokeId = jc.jokeJokeId) ' +
                 'left join rate r on (j.jokeId = r.jokeJokeId) ' +
                 'join user u on (j.userUserId = u.userId) ' +
