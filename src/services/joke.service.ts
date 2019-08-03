@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Joke } from '../entities/joke.entity';
 import { getRepository, getConnection } from 'typeorm';
 import { User } from '../entities/user.entity';
+import { Category } from '../entities/category.entity';
 
 @Injectable()
 export class JokeService {
@@ -52,20 +53,20 @@ export class JokeService {
     async getTopRatedJokes(userId: number) {
         const topJokes = await getConnection()
             .query
-            ('select joke.text,avg(rating) avgs from joke left join rate on (joke.jokeId = rate.jokeJokeId)'+ 
-            'where joke.userUserId = ?'+
-            'group by (joke.jokeId) order by avgs desc limit 5;', [userId]);
+            ('select joke.text,avg(rating) avgs from joke left join rate on (joke.jokeId = rate.jokeJokeId)' +
+                'where joke.userUserId = ?' +
+                'group by (joke.jokeId) order by avgs desc limit 5;', [userId]);
 
         return topJokes;
     }
 
-    async getTenRandomJokes(){
+    async getTenRandomJokes() {
         const jokes = await getConnection()
-        .query
-        ('select j.text, u.username, avg(r.rating) avgRating, date(j.dateCreated) timeStamp '+
-        'from joke j join user u on (j.userUserId = u.userId)'+
-        'join rate r on (j.jokeId = r.jokeJokeId)'+
-        ' group by (j.jokeId) order by rand() limit 5;');
+            .query
+            ('select j.text, u.username, avg(r.rating) avgRating, date(j.dateCreated) timeStamp ' +
+                'from joke j join user u on (j.userUserId = u.userId)' +
+                'join rate r on (j.jokeId = r.jokeJokeId)' +
+                ' group by (j.jokeId) order by rand() limit 5;');
 
         return jokes;
     }
@@ -73,14 +74,14 @@ export class JokeService {
     // gets back jokeId, categoryId, text for the given category
     async getJokesForCategory(categoryId: number) {
         const data = await getConnection()
-        .query
-        ('select j.jokeId, jc.categoryCategoryId, j.text, round(ifnull(avg(r.rating),0),2) avgRating, date(j.dateCreated) posted, '+
-        'u.username from joke j join joke_category jc '+ 
-        'on (j.jokeId = jc.jokeJokeId) '+
-        'left join rate r on (j.jokeId = r.jokeJokeId) '+
-        'join user u on (j.userUserId = u.userId) '+
-        'where jc.categoryCategoryId = ? '+
-        'group by (j.jokeId) order by avgRating,posted desc;', [categoryId]);
+            .query
+            ('select j.jokeId, jc.categoryCategoryId, j.text, round(ifnull(avg(r.rating),0),2) avgRating, date(j.dateCreated) posted, ' +
+                'u.username from joke j join joke_category jc ' +
+                'on (j.jokeId = jc.jokeJokeId) ' +
+                'left join rate r on (j.jokeId = r.jokeJokeId) ' +
+                'join user u on (j.userUserId = u.userId) ' +
+                'where jc.categoryCategoryId = ? ' +
+                'group by (j.jokeId) order by avgRating,posted desc;', [categoryId]);
 
         return data;
 
@@ -88,27 +89,35 @@ export class JokeService {
 
     async getJokesForUsername(username: string) {
         const data = await getConnection()
-        .query
-        ('select j.jokeId, j.text, ifnull(avg(r.rating),0) avgRating, date(j.dateCreated) posted, '+
-         'u.username from joke j '+
-         'left join rate r on (j.jokeId = r.jokeJokeId) '+
-         'join user u on (j.userUserId = u.userId) where u.username = ? '+
-         'group by (j.jokeId) order by avgRating desc;', [username]);
+            .query
+            ('select j.jokeId, j.text, ifnull(avg(r.rating),0) avgRating, date(j.dateCreated) posted, ' +
+                'u.username from joke j ' +
+                'left join rate r on (j.jokeId = r.jokeJokeId) ' +
+                'join user u on (j.userUserId = u.userId) where u.username = ? ' +
+                'group by (j.jokeId) order by avgRating desc;', [username]);
 
         return data;
     }
 
     async getCategories() {
         const categories = await getConnection()
-        .query
-        ('select categoryId, name from category');
+            .query
+            ('select categoryId, name from category');
         return categories;
     }
 
     async postJoke(newJoke: any, userId: number) {
 
-        console.log(newJoke);
-        console.log(userId);
+        const userPostedBy = await getRepository(User).findOne({where: {userId}});
+        const categoryOfJoke = await getRepository(Category).findOne({where: {categoryId: newJoke.categoryId}});
+
+        const newJokeToInsert = new Joke();
+        newJokeToInsert.user = userPostedBy;
+        newJokeToInsert.text = newJoke.text;
+        newJokeToInsert.categories = [categoryOfJoke];
+
+        const res = await getRepository(Joke).save(newJokeToInsert);
+        return res;
     }
 
 }
