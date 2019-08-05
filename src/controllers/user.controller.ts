@@ -143,5 +143,4 @@ export class UserController {
         res.send(users);
     }
 
-
 }
