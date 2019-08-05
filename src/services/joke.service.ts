@@ -63,7 +63,7 @@ export class JokeService {
     async getTenRandomJokes() {
         const jokes = await getConnection()
             .query
-            ('select j.text, u.username, avg(r.rating) avgRating, date(j.dateCreated) timeStamp ' +
+            ('select j.text, u.username, u.userId, avg(r.rating) avgRating, date(j.dateCreated) timeStamp ' +
                 'from joke j join user u on (j.userUserId = u.userId)' +
                 'join rate r on (j.jokeId = r.jokeJokeId)' +
                 ' group by (j.jokeId) order by rand() limit 5;');
@@ -76,7 +76,7 @@ export class JokeService {
         const data = await getConnection()
             .query
             ('select j.jokeId, jc.categoryCategoryId, j.text, round(ifnull(avg(r.rating),0),2) avgRating, date(j.dateCreated) posted, ' +
-                'u.username from joke j join joke_categories_category jc ' +
+                'u.username, u.userId from joke j join joke_categories_category jc ' +
                 'on (j.jokeId = jc.jokeJokeId) ' +
                 'left join rate r on (j.jokeId = r.jokeJokeId) ' +
                 'join user u on (j.userUserId = u.userId) ' +
@@ -91,7 +91,7 @@ export class JokeService {
         const data = await getConnection()
             .query
             ('select j.jokeId, j.text, ifnull(avg(r.rating),0) avgRating, date(j.dateCreated) posted, ' +
-                'u.username from joke j ' +
+                'u.username, u.userId from joke j ' +
                 'left join rate r on (j.jokeId = r.jokeJokeId) ' +
                 'join user u on (j.userUserId = u.userId) where u.username = ? ' +
                 'group by (j.jokeId) order by avgRating desc;', [username]);
@@ -125,7 +125,7 @@ export class JokeService {
         const jokes = await getConnection()
             .query
             ('select j.jokeId, j.text, ifnull(avg(r.rating),0) avgRating, day(j.dateCreated) posted, ' +
-                'u.username from joke j left join rate r on (j.jokeId = r.jokeJokeId) ' +
+                'u.username, u.userId from joke j left join rate r on (j.jokeId = r.jokeJokeId) ' +
                 'join user u on (j.userUserId = u.userId) ' +
                 'where month(now()) = month(j.dateCreated) ' +
                 'group by (j.jokeId) order by avgRating desc limit 10;');
@@ -137,7 +137,7 @@ export class JokeService {
         const jokes = await getConnection()
             .query
             ('select j.jokeId, j.text, ifnull(avg(r.rating),0) avgRating, day(j.dateCreated) posted, ' +
-                'u.username from joke j left join rate r on (j.jokeId = r.jokeJokeId) ' +
+                'u.username, u.userId from joke j left join rate r on (j.jokeId = r.jokeJokeId) ' +
                 'join user u on (j.userUserId = u.userId) ' +
                 'where year(now()) = year(j.dateCreated) ' +
                 'group by (j.jokeId) order by avgRating desc limit 10;');
@@ -149,12 +149,10 @@ export class JokeService {
         const jokes = await getConnection()
             .query
             ('select j.jokeId, j.text, ifnull(avg(r.rating),0) avgRating, day(j.dateCreated) posted, ' +
-                'u.username from joke j left join rate r on (j.jokeId = r.jokeJokeId) ' +
+                'u.username, u.userId from joke j left join rate r on (j.jokeId = r.jokeJokeId) ' +
                 'join user u on (j.userUserId = u.userId) ' +
                 'group by (j.jokeId) order by avgRating desc limit 10;');
         return jokes;
     }
-
-    
 
 }
