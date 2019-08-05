@@ -3,6 +3,7 @@ import { Joke } from '../entities/joke.entity';
 import { getRepository, getConnection } from 'typeorm';
 import { User } from '../entities/user.entity';
 import { Category } from '../entities/category.entity';
+import { Rate } from '../entities/rate.entity';
 
 @Injectable()
 export class JokeService {
@@ -155,4 +156,19 @@ export class JokeService {
         return jokes;
     }
 
+    async rateJoke(rate: any, userId: number) {
+
+        const userRanked = await getRepository(User).findOne({ where: { userId } });
+        const jokeRated = await getRepository(Joke).findOne({ where: { jokeId: rate.jokeId } });
+
+        const newRating = new Rate();
+        newRating.user = userRanked;
+        newRating.joke = jokeRated;
+        newRating.rating = rate.rating;
+
+        await getConnection().query('Delete from rate where userUserId = ? and jokeJokeId = ?', [userId, rate.jokeId]);
+
+        const res = await getRepository(Rate).save(newRating);
+        return res;
+    }
 }
