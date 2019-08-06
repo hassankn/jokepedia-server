@@ -18,4 +18,11 @@ export class UserService {
         console.log(users);
         return users;
     }
+
+    async validateLogin(userObj: any){
+        const userRepo = await getRepository(User);
+        console.log(userObj);
+        const user = await userRepo.findOne({where: {username: userObj.username, password: userObj.password}});
+        return user;
+    }
 }
