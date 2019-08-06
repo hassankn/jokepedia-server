@@ -160,4 +160,12 @@ export class UserController {
         const response = await this.userService.validateLogin(user);
         res.send(response);
     }
+
+    @Get(':userId/getHomeFeedJokes')
+    async getCustomizedJokes(
+        @Res() res: ServerResponse,
+        @Param('userId') userId: number) {
+        const response = await this.userService.getCustomizedJokes(userId);
+        res.send(response);
+    }
 }
