@@ -12,6 +12,12 @@ export class UserService {
         return users;
     }
 
+    async getUser(userId: number) {
+        const userRepo = await getRepository(User);
+        const user = await userRepo.find({where: {userId}});
+        return user;
+    }
+
     async searchUsersByUsername(username: string) {
         const userRepo = await getRepository(User);
         const users = await userRepo.find({ where: { username: Like('%' + username + '%') } });
