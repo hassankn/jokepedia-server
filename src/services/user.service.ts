@@ -12,21 +12,19 @@ export class UserService {
         return users;
     }
 
-    async searchUsersByUsername(username: string){
+    async searchUsersByUsername(username: string) {
         const userRepo = await getRepository(User);
-        const users = await userRepo.find({where: {username: Like('%' + username + '%')}});
+        const users = await userRepo.find({ where: { username: Like('%' + username + '%') } });
         console.log(users);
         return users;
     }
 
-    async validateLogin(userObj: any){
+    async validateLogin(userObj: any) {
         const userRepo = await getRepository(User);
-        //console.log(userObj);
-        let user = await userRepo.findOne({where: {username: userObj.username, password: userObj.password}});
-        if (user == null){
-            return {userId: null};
-        }
-        else{
+        const user = await userRepo.findOne({ where: { username: userObj.username, password: userObj.password } });
+        if (user === null) {
+            return null;
+        } else {
             return user;
         }
     }

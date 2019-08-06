@@ -156,12 +156,8 @@ export class UserController {
     @Post('login')
     async login(
         @Res() res: ServerResponse,
-        @Body('username') username: any,
-        @Body('password') password: any) {
-
-        const user = {username, password};
+        @Body('user') user: any) {
         const response = await this.userService.validateLogin(user);
         res.send(response);
     }
-
 }
