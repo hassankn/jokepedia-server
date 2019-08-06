@@ -54,6 +54,16 @@ export class UserController {
         res.send(topJokes);
     }
 
+    @Get(':userId/getFavoriteCategories')
+    async getFavoriteCategories(
+
+        @Res() res: ServerResponse,
+        @Param('userId') userId: number,
+    ) {
+        const topJokes = await this.jokeService.getFavoriteCategories(userId);
+        res.send(topJokes);
+    }
+
     @Get('getTenRandomJokes')
     async getTenRandomJokes(
 
