@@ -30,6 +30,18 @@ export class UserService {
         return jokes;
     }
 
+    async registerUser(newUser: any){
+        const checkUser = await getRepository(User).findOne({where: {username : newUser.username}});
+        let res = null;
+        // if user is null we can add the new user
+        if (checkUser == null){
+            const userToInsert = JSON.parse(JSON.stringify(newUser));
+            userToInsert.level = 1;
+            res = await getRepository(User).save(userToInsert);
+        }
+        return res;
+    }
+
     async validateLogin(userObj: any) {
         const userRepo = await getRepository(User);
         const user = await userRepo.findOne({ where: { username: userObj.username, password: userObj.password } });

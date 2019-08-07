@@ -93,12 +93,10 @@ export class JokeService {
                 'u.username, u.userId from joke j join joke_categories_category jc ' +
                 'on (j.jokeId = jc.jokeJokeId) ' +
                 'left join rate r on (j.jokeId = r.jokeJokeId) ' +
-                'join user u on (j.userUserId = u.userId) ' +
+                'left join user u on (j.userUserId = u.userId) ' +
                 'where jc.categoryCategoryId = ? ' +
                 'group by (j.jokeId) order by avgRating desc, posted desc;', [categoryId]);
-
         return data;
-
     }
 
     async getJokesForUsername(username: string) {

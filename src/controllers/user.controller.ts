@@ -114,7 +114,6 @@ export class UserController {
         @Res() res: ServerResponse,
         @Param('userId') userId: number,
         @Body('newRate') newRate: any) {
-
         const response = await this.jokeService.rateJoke(newRate, userId);
         res.send(response);
     }
@@ -168,4 +167,12 @@ export class UserController {
         const response = await this.userService.getCustomizedJokes(userId);
         res.send(response);
     }
+
+    @Post('register')
+    async registerUser(
+        @Res() res: ServerResponse,
+        @Body('user') newUser: any) {
+            const response = await this.userService.registerUser(newUser);
+            res.send(response);
+        }
 }
