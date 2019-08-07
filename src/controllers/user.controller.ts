@@ -17,6 +17,13 @@ export class UserController {
         res.send(users);
     }
 
+    @Get(':userId/fetchUser')
+    async getUser(@Res() res: ServerResponse,
+                  @Param('userId') userId: number) {
+        const user = await this.userService.getUser(userId);
+        res.send(user);
+    }
+
     @Get(':userId/userjokes')
     async getUserJokes(
         @Res() res: ServerResponse,
