@@ -95,7 +95,7 @@ export class JokeService {
                 'left join rate r on (j.jokeId = r.jokeJokeId) ' +
                 'join user u on (j.userUserId = u.userId) ' +
                 'where jc.categoryCategoryId = ? ' +
-                'group by (j.jokeId) order by avgRating,posted desc;', [categoryId]);
+                'group by (j.jokeId) order by avgRating desc, posted desc;', [categoryId]);
 
         return data;
 
