@@ -162,7 +162,7 @@ export class UserController {
     }
 
     @Get(':userId/getHomeFeedJokes')
-    async getCustomizedJokes(
+    async getHomeFeedJokes(
         @Res() res: ServerResponse,
         @Param('userId') userId: number) {
         const response = await this.userService.getCustomizedJokes(userId);

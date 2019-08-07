@@ -56,7 +56,7 @@ export class JokeService {
             .query
             ('select joke.text,avg(rating) avgs from joke left join rate on (joke.jokeId = rate.jokeJokeId)' +
                 'where joke.userUserId = ?' +
-                'group by (joke.jokeId) order by avgs desc limit 5;', [userId]);
+                'group by (joke.jokeId) order by avgs desc limit 10;', [userId]);
 
         return topJokes;
     }
@@ -77,9 +77,9 @@ export class JokeService {
     async getTenRandomJokes() {
         const jokes = await getConnection()
             .query
-            ('select j.text, u.username, u.userId, avg(r.rating) avgRating, date(j.dateCreated) timeStamp ' +
+            ('select j.jokeId, j.text, u.username, u.userId, round(ifnull(avg(r.rating),0),2) avgRating, date(j.dateCreated) timeStamp ' +
                 'from joke j join user u on (j.userUserId = u.userId)' +
-                'join rate r on (j.jokeId = r.jokeJokeId)' +
+                'left join rate r on (j.jokeId = r.jokeJokeId)' +
                 ' group by (j.jokeId) order by rand() limit 5;');
 
         return jokes;
