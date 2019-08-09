@@ -139,13 +139,14 @@ export class JokeService {
         let userId = report.userId
         let jokeId = report.jokeId
 
-        const userPostedBy = await getRepository(User).findOne({where: userId});
-        const joke = await getRepository(Joke).findOne({where: jokeId});
+        const userPostedBy = await getRepository(User).findOne({where: {userId: report.userId}});
+        const joke = await getRepository(Joke).findOne({where: {jokeId: report.jokeId}});
 
         const newReport = new Report();
         newReport.user = userPostedBy;
         newReport.joke = joke;
         newReport.description = "";
+        console.log(newReport)
 
         const res = await getRepository(Report).save(newReport);
         return res;
