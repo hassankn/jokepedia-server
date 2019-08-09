@@ -19,7 +19,7 @@ export class UserController {
 
     @Get(':userId/fetchUser')
     async getUser(@Res() res: ServerResponse,
-                  @Param('userId') userId: number) {
+        @Param('userId') userId: number) {
         const user = await this.userService.getUser(userId);
         res.send(user);
     }
@@ -179,7 +179,25 @@ export class UserController {
     async registerUser(
         @Res() res: ServerResponse,
         @Body('user') newUser: any) {
-            const response = await this.userService.registerUser(newUser);
-            res.send(response);
-        }
+        const response = await this.userService.registerUser(newUser);
+        res.send(response);
+    }
+
+    @Get(':userId/followers')
+    async getFollowers(
+        @Res() res: ServerResponse,
+        @Param('userId') userId: number,
+    ) {
+        const followers = await this.userService.getFollowers(userId);
+        res.send(followers);
+    }
+
+    @Get(':userId/followees')
+    async getFollowees(
+        @Res() res: ServerResponse,
+        @Param('userId') userId: number,
+    ) {
+        const followees = await this.userService.getFollowees(userId);
+        res.send(followees);
+    }
 }
