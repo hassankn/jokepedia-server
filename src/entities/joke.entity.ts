@@ -57,5 +57,5 @@ export class Joke {
     reports: Report[];
 
     @CreateDateColumn()
-    dateCreated!: Date;
+    dateCreated: Date;
 }
