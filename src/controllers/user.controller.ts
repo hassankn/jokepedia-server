@@ -220,7 +220,7 @@ export class UserController {
         res.send(followUser);
     }
 
-    @Post('unFollowUser')
+    @Post('unfollowUser')
     async unFollowUser(
         @Res() res: ServerResponse,
         @Body('followerId') followerId: any,
