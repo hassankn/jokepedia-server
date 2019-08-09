@@ -1,7 +1,8 @@
-import { Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Entity, ManyToOne, Unique } from 'typeorm';
 import { User } from './user.entity';
 
 @Entity()
+@Unique(['follows', 'follower'])
 export class Follow {
 
     @ManyToOne(() => User, user => user.follows,
