@@ -28,10 +28,12 @@ export class UserService {
     async getCustomizedJokes(userId: number) {
         const jokes = await getConnection()
             .query
-            ('select j.jokeId, j.text, u.userId, u.username, u.userId, avg(r.rating) avgRating, date(j.dateCreated) timeStamp, ' +
-                ' getScoreOfJokeForUser(j.jokeId, ?) score from joke j join user u on (j.userUserId = u.userId)' +
-                ' left join rate r on (j.jokeId = r.jokeJokeId)' +
-                ' group by (j.jokeId) order by score desc, timestamp desc limit 20;', [userId]);
+            ('select j.jokeId, j.text, category.name as "Category",u.userId, u.username, u.userId, avg(r.rating) avgRating, date(j.dateCreated) timeStamp,' +
+        'getScoreOfJokeForUser(j.jokeId, 2) score from joke j join user u on (j.userUserId = u.userId)' +
+        'left join rate r on (j.jokeId = r.jokeJokeId)' +
+        'left join joke_categories_category on (j.jokeId = joke_categories_category.jokeJokeId)' +
+        'left join category on (joke_categories_category.categoryCategoryId = category.categoryId)' +
+        'group by j.jokeId, Category order by score desc, timestamp desc limit 20;', [userId]);
 
         return jokes;
     }

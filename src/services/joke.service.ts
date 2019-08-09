@@ -4,6 +4,7 @@ import {getRepository, getConnection} from 'typeorm';
 import {User} from '../entities/user.entity';
 import {Category} from '../entities/category.entity';
 import {Rate} from '../entities/rate.entity';
+import {Report} from "../entities/report.entity";
 
 @Injectable()
 export class JokeService {
@@ -132,6 +133,28 @@ export class JokeService {
         const res = await getRepository(Joke).save(newJokeToInsert);
         return res;
     }
+
+    async reportJoke(report: any) {
+        console.log(report)
+        let userId = report.userId
+        let jokeId = report.jokeId
+
+        const userPostedBy = await getRepository(User).findOne({where: userId});
+        const joke = await getRepository(Joke).findOne({where: jokeId});
+
+        const newReport = new Report();
+        newReport.user = userPostedBy;
+        newReport.joke = joke;
+        newReport.description = "";
+
+        const res = await getRepository(Report).save(newReport);
+        return res;
+
+    }
+
+
+
+
 
     // gives top rated jokes for a month
     async getTopTenOfMonth() {

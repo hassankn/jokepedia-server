@@ -1,7 +1,7 @@
-import { Get, Controller, Res, Post, Headers, Param, Body } from '@nestjs/common';
-import { UserService } from '../services/user.service';
-import { Response as ServerResponse } from 'express-serve-static-core';
-import { JokeService } from '../services/joke.service';
+import {Get, Controller, Res, Post, Headers, Param, Body} from '@nestjs/common';
+import {UserService} from '../services/user.service';
+import {Response as ServerResponse} from 'express-serve-static-core';
+import {JokeService} from '../services/joke.service';
 
 @Controller('user')
 export class UserController {
@@ -9,7 +9,8 @@ export class UserController {
     constructor(
         private readonly userService: UserService,
         private readonly jokeService: JokeService,
-    ) { }
+    ) {
+    }
 
     @Get()
     async getUsers(@Res() res: ServerResponse) {
@@ -19,7 +20,7 @@ export class UserController {
 
     @Get(':userId/fetchUser')
     async getUser(@Res() res: ServerResponse,
-        @Param('userId') userId: number) {
+                  @Param('userId') userId: number) {
         const user = await this.userService.getUser(userId);
         res.send(user);
     }
@@ -53,7 +54,6 @@ export class UserController {
 
     @Get(':userId/getTopJokesPosted')
     async getTopJokesPosted(
-
         @Res() res: ServerResponse,
         @Param('userId') userId: number,
     ) {
@@ -63,7 +63,6 @@ export class UserController {
 
     @Get(':userId/getFavoriteCategories')
     async getFavoriteCategories(
-
         @Res() res: ServerResponse,
         @Param('userId') userId: number,
     ) {
@@ -73,7 +72,6 @@ export class UserController {
 
     @Get('getTenRandomJokes')
     async getTenRandomJokes(
-
         @Res() res: ServerResponse,
     ) {
         const jokes = await this.jokeService.getTenRandomJokes();
@@ -113,6 +111,14 @@ export class UserController {
         @Body('newJoke') newJoke: any) {
 
         const response = await this.jokeService.postJoke(newJoke, userId);
+        res.send(response);
+    }
+
+    @Post('report')
+    async reportJoke(
+        @Res() res: ServerResponse,
+        @Body('report') report: any) {
+        const response = await this.jokeService.reportJoke(report);
         res.send(response);
     }
 
@@ -158,6 +164,9 @@ export class UserController {
         console.log(users);
         res.send(users);
     }
+
+
+
 
     @Post('login')
     async login(
