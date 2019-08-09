@@ -1,17 +1,17 @@
-import {Injectable} from '@nestjs/common';
-import {Joke} from '../entities/joke.entity';
-import {getRepository, getConnection} from 'typeorm';
-import {User} from '../entities/user.entity';
-import {Category} from '../entities/category.entity';
-import {Rate} from '../entities/rate.entity';
-import {Report} from "../entities/report.entity";
+import { Injectable } from '@nestjs/common';
+import { Joke } from '../entities/joke.entity';
+import { getRepository, getConnection } from 'typeorm';
+import { User } from '../entities/user.entity';
+import { Category } from '../entities/category.entity';
+import { Rate } from '../entities/rate.entity';
+import { Report } from '../entities/report.entity';
 
 @Injectable()
 export class JokeService {
 
     async getJokesByUserId(userId: number) {
         const jokeRepo = await getRepository(Joke);
-        const jokes = await jokeRepo.find({where: {user: userId}});
+        const jokes = await jokeRepo.find({ where: { user: userId } });
         return jokes;
     }
 
@@ -19,7 +19,7 @@ export class JokeService {
         const jokeRepo = await getRepository(Joke);
         const userRepo = await getRepository(User);
 
-        const userPosted = await userRepo.findOne({where: {userId: uid}});
+        const userPosted = await userRepo.findOne({ where: { userId: uid } });
 
         const newJoke = new Joke();
 
@@ -34,7 +34,7 @@ export class JokeService {
         const count = await getRepository(Joke)
             .createQueryBuilder('joke')
             .select('COUNT(*)', 'count')
-            .where({user: userId})
+            .where({ user: userId })
             .getRawOne();
 
         return count['count'];
@@ -70,7 +70,7 @@ export class JokeService {
                 ' left join joke_categories_category on (joke_categories_category.jokeJokeId = rate.jokeJokeId)' +
                 ' left join category on (category.categoryId = joke_categories_category.categoryCategoryId)' +
                 ' where rate.userUserId = ?' +
-                ' group by category.name order by count(*) desc limit 3;' , [userId]);
+                ' group by category.name order by count(*) desc limit 3;', [userId]);
 
         return categories;
     }
@@ -79,11 +79,11 @@ export class JokeService {
         const jokes = await getConnection()
             .query
             ('select j.jokeId, j.text, category.name as "Category",u.username, u.userId, round(ifnull(avg(r.rating),0),2) avgRating, date(j.dateCreated) timeStamp ' +
-       'from joke j join user u on (j.userUserId = u.userId) ' +
-        'left join rate r on (j.jokeId = r.jokeJokeId) ' +
-        'left join joke_categories_category on (j.jokeId = joke_categories_category.jokeJokeId) ' +
-        'left join category on (joke_categories_category.categoryCategoryId = category.categoryId) ' +
-        'group by j.jokeId, category.name order by rand() limit 10;');
+                'from joke j join user u on (j.userUserId = u.userId) ' +
+                'left join rate r on (j.jokeId = r.jokeJokeId) ' +
+                'left join joke_categories_category on (j.jokeId = joke_categories_category.jokeJokeId) ' +
+                'left join category on (joke_categories_category.categoryCategoryId = category.categoryId) ' +
+                'group by j.jokeId, category.name order by rand() limit 10;');
 
         return jokes;
     }
@@ -122,8 +122,8 @@ export class JokeService {
 
     async postJoke(newJoke: any, userId: number) {
 
-        const userPostedBy = await getRepository(User).findOne({where: {userId}});
-        const categoryOfJoke = await getRepository(Category).findOne({where: {categoryId: newJoke.categoryId}});
+        const userPostedBy = await getRepository(User).findOne({ where: { userId } });
+        const categoryOfJoke = await getRepository(Category).findOne({ where: { categoryId: newJoke.categoryId } });
 
         const newJokeToInsert = new Joke();
         newJokeToInsert.user = userPostedBy;
@@ -139,8 +139,8 @@ export class JokeService {
         let userId = report.userId
         let jokeId = report.jokeId
 
-        const userPostedBy = await getRepository(User).findOne({where: {userId: report.userId}});
-        const joke = await getRepository(Joke).findOne({where: {jokeId: report.jokeId}});
+        const userPostedBy = await getRepository(User).findOne({ where: { userId: report.userId } });
+        const joke = await getRepository(Joke).findOne({ where: { jokeId: report.jokeId } });
 
         const newReport = new Report();
         newReport.user = userPostedBy;
@@ -194,8 +194,8 @@ export class JokeService {
 
     async rateJoke(rate: any, userId: number) {
 
-        const userRanked = await getRepository(User).findOne({where: {userId}});
-        const jokeRated = await getRepository(Joke).findOne({where: {jokeId: rate.jokeId}});
+        const userRanked = await getRepository(User).findOne({ where: { userId } });
+        const jokeRated = await getRepository(Joke).findOne({ where: { jokeId: rate.jokeId } });
 
         const newRating = new Rate();
         newRating.user = userRanked;
