@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { User } from '../entities/user.entity';
 import { getRepository, getConnection, Like } from 'typeorm';
 import { Joke } from '../entities/joke.entity';
+import { Follow } from 'src/entities/follow.entity';
 
 @Injectable()
 export class UserService {
@@ -61,14 +62,18 @@ export class UserService {
     }
 
     async getFollowees(userId: number) {
-        const followers = await getConnection().query(
+        const followees = await getConnection().query(
             'SELECT userId, username, name, email, levelLevelId ' +
-            'FROM follow JOIN user ON followsUserId = userId WHERE followerUserId = ?;' [userId]);
+            'FROM follow JOIN user ON followsUserId = userId WHERE followerUserId = ?;', [userId]);
+
+        return followees;
     }
 
     async getFollowers(userId: number) {
         const followers = await getConnection().query(
             'SELECT userId, username, name, email, levelLevelId ' +
             'FROM follow JOIN user ON followerUserId = userId WHERE followsUserId = ?;', [userId]);
+
+        return followers;
     }
 }

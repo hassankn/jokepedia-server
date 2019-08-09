@@ -9,7 +9,6 @@ export class Follow {
             primary: true,
             nullable: false,
         })
-    @JoinColumn()
     follows: User;
 
     @ManyToOne(() => User, user => user.follower,
@@ -17,6 +16,5 @@ export class Follow {
             primary: true,
             nullable: false,
         })
-    @JoinColumn()
     follower: User;
 }
