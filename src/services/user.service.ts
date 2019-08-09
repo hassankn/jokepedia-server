@@ -30,11 +30,11 @@ export class UserService {
         const jokes = await getConnection()
             .query
             ('select j.jokeId, j.text, category.name as "Category",u.userId, u.username, u.userId, avg(r.rating) avgRating, date(j.dateCreated) timeStamp,' +
-        'getScoreOfJokeForUser(j.jokeId, 2) score from joke j join user u on (j.userUserId = u.userId)' +
-        'left join rate r on (j.jokeId = r.jokeJokeId)' +
-        'left join joke_categories_category on (j.jokeId = joke_categories_category.jokeJokeId)' +
-        'left join category on (joke_categories_category.categoryCategoryId = category.categoryId)' +
-        'group by j.jokeId, Category order by score desc, timestamp desc limit 20;', [userId]);
+                'getScoreOfJokeForUser(j.jokeId, 2) score from joke j join user u on (j.userUserId = u.userId)' +
+                'left join rate r on (j.jokeId = r.jokeJokeId)' +
+                'left join joke_categories_category on (j.jokeId = joke_categories_category.jokeJokeId)' +
+                'left join category on (joke_categories_category.categoryCategoryId = category.categoryId)' +
+                'group by j.jokeId, Category order by score desc, timestamp desc limit 20;', [userId]);
 
         return jokes;
     }
@@ -75,5 +75,18 @@ export class UserService {
             'FROM follow JOIN user ON followerUserId = userId WHERE followsUserId = ?;', [userId]);
 
         return followers;
+    }
+
+    async followUser(followerId: number, followeeId: number) {
+        const followUser = await getConnection().query('insert into follow values (?, ?);', [followeeId, followerId]);
+
+        return followUser;
+    }
+
+    async unFollowUser(followerId: number, followeeId: number) {
+        const followUser = await getConnection()
+            .query('delete from follow where followsUserId = ? and followerUserId = ?;', [followeeId, followerId]);
+
+        return followUser;
     }
 }

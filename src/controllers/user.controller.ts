@@ -1,7 +1,7 @@
-import {Get, Controller, Res, Post, Headers, Param, Body} from '@nestjs/common';
-import {UserService} from '../services/user.service';
-import {Response as ServerResponse} from 'express-serve-static-core';
-import {JokeService} from '../services/joke.service';
+import { Get, Controller, Res, Post, Headers, Param, Body } from '@nestjs/common';
+import { UserService } from '../services/user.service';
+import { Response as ServerResponse } from 'express-serve-static-core';
+import { JokeService } from '../services/joke.service';
 
 @Controller('user')
 export class UserController {
@@ -20,7 +20,7 @@ export class UserController {
 
     @Get(':userId/fetchUser')
     async getUser(@Res() res: ServerResponse,
-                  @Param('userId') userId: number) {
+        @Param('userId') userId: number) {
         const user = await this.userService.getUser(userId);
         res.send(user);
     }
@@ -208,5 +208,25 @@ export class UserController {
     ) {
         const followees = await this.userService.getFollowees(userId);
         res.send(followees);
+    }
+
+    @Post('followUser')
+    async FollowUser(
+        @Res() res: ServerResponse,
+        @Body('followerId') followerId: any,
+        @Body('followeeId') followeeId: any,
+    ) {
+        const followUser = await this.userService.followUser(followerId, followeeId);
+        res.send(followUser);
+    }
+
+    @Post('unFollowUser')
+    async unFollowUser(
+        @Res() res: ServerResponse,
+        @Body('followerId') followerId: any,
+        @Body('followeeId') followeeId: any,
+    ) {
+        const unFollowUser = await this.userService.unFollowUser(followerId, followeeId);
+        res.send(unFollowUser);
     }
 }
